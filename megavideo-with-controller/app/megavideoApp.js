@@ -1,68 +1,74 @@
-angular.module('megaVideoDemo', []).
-    directive('megaVideo', function($sce) {
+angular.module('megaVideoDemo', [])
+    .directive('megaVideo', function ($sce) {
         return {
             restrict: 'E',
             templateUrl: 'mega-video.html',
             scope: true,
             transclude: true,
-            controller: function($scope, $element, $attrs){
+            controller: function ($scope, $element, $attrs) {
                 var videoPlayer = $element.find('video')[0]
-                $scope.video =  {
-                    play: function() {
+                $scope.video = {
+                    play: function () {
                         videoPlayer.play();
                         $scope.video.status = 'play';
                     },
-                    pause: function() {
+                    pause: function () {
                         videoPlayer.pause();
                         $scope.video.status = 'pause';
                     },
-                    stop: function() {
+                    stop: function () {
                         videoPlayer.pause();
                         videoPlayer.currentTime = 0;
                         $scope.video.status = 'stop'
                     },
-                    togglePlay: function() {
+                    togglePlay: function () {
                         $scope.video.status == 'play' ? this.pause() : this.play();
                     },
                     width: $attrs.width,
                     height: $attrs.height
                 }
-                
+
                 // what we'll expose to outside world
                 var ctrl = this;
-                this.setVolume = function(level) {
+                this.setVolume = function (level) {
                     videoPlayer.volume = level;
                 }
             },
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 scope.sources = [];
-                function processSources(){
+
+                function processSources() {
                     var sourceTypes = {
-                        webm: { type: 'video/webm'},
-                        mp4: { type: 'video/mp4'},
-                        ogg: { type: 'video/ogg'}
+                        webm: {
+                            type: 'video/webm'
+                        },
+                        mp4: {
+                            type: 'video/mp4'
+                        },
+                        ogg: {
+                            type: 'video/ogg'
+                        }
                     }
                     for (source in sourceTypes) {
                         if (attrs.hasOwnProperty(source)) {
-                            scope.sources.push(
-                                { type: sourceTypes[source].type, 
-                                  src: $sce.trustAsResourceUrl(attrs[source])
-                                }
-                            );
+                            scope.sources.push({
+                                type: sourceTypes[source].type,
+                                src: $sce.trustAsResourceUrl(attrs[source])
+                            });
                         }
                     }
-                    
+
                 }
                 processSources();
             },
 
         }
     })
-    .directive('volumeSlider', function(){
+    .directive('volumeSlider', function () {
         return {
             require: '?^megaVideo',
             restrict: 'A',
-            link: function(scope, element, attrs, megaVideoController) {
+            link: function (scope, element, attrs, megaVideoController) {
                 var initialVolume = parseFloat(attrs.initialVolume);
                 megaVideoController.setVolume(initialVolume);
                 angular.element(element.slider({
@@ -71,13 +77,13 @@ angular.module('megaVideoDemo', []).
                     step: 0.01,
                     value: initialVolume,
                     orientation: "horizontal",
-                    slide: function(event, ui) {
-                        scope.$apply(function(){
+                    slide: function (event, ui) {
+                        scope.$apply(function () {
                             megaVideoController.setVolume(ui.value);
                         })
                     },
-                    change: function(event, ui) {
-                        scope.$apply(function(){
+                    change: function (event, ui) {
+                        scope.$apply(function () {
                             megaVideoController.setVolume(ui.value);
                         })
                     }

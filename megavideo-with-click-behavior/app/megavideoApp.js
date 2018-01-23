@@ -5,8 +5,12 @@ directive('megaVideo', function ($sce) {
         templateUrl: 'mega-video.html',
         scope: true,
         link: function (scope, element, attrs) {
-            var videoPlayer = element.find('video')[0];
-            scope.sources = [];
+            console.log('link function running');
+        },
+        controller: function ($scope, $element, $attrs) {
+            console.log('controller function running');
+            var videoPlayer = $element.find('video')[0];
+            $scope.sources = [];
 
             function processSources() {
                 var sourceTypes = {
@@ -19,37 +23,37 @@ directive('megaVideo', function ($sce) {
                     ogg: {
                         type: 'video/ogg'
                     }
-                };
+                }
                 for (source in sourceTypes) {
-                    if (attrs.hasOwnProperty(source)) {
-                        scope.sources.push({
+                    if ($attrs.hasOwnProperty(source)) {
+                        $scope.sources.push({
                             type: sourceTypes[source].type,
-                            src: $sce.trustAsResourceUrl(attrs[source])
+                            src: $sce.trustAsResourceUrl($attrs[source])
                         });
                     }
                 }
             }
             processSources();
-            scope.video = {
+            $scope.video = {
                 play: function () {
                     videoPlayer.play();
-                    scope.video.status = 'play';
+                    $scope.video.status = 'play';
                 },
                 pause: function () {
                     videoPlayer.pause();
-                    scope.video.status = 'pause';
+                    $scope.video.status = 'pause';
                 },
                 stop: function () {
                     videoPlayer.pause();
                     videoPlayer.currentTime = 0;
-                    scope.video.status = 'stop'
+                    $scope.video.status = 'stop'
                 },
                 togglePlay: function () {
-                    scope.video.status == 'play' ? this.pause() : this.play();
+                    $scope.video.status == 'play' ? this.pause() : this.play();
                 },
-                width: attrs.width,
-                height: attrs.height
+                width: $attrs.width,
+                height: $attrs.height
             };
-        },
+        }
     }
 });

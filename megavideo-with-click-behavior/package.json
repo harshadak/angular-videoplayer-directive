@@ -11,7 +11,11 @@
     "karma": "^0.12.16"
   },
   "devDependencies": {
-    "jquery": "^2.1.1"
+    "jquery": "^2.1.1",
+    "karma": "^0.12.37",
+    "karma-chrome-launcher": "^0.1.12",
+    "karma-jasmine": "^0.1.6",
+    "karma-ng-html2js-preprocessor": "^0.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

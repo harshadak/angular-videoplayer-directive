@@ -13,5 +13,8 @@
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.3",
     "karma-jasmine": "^0.3.8"
+  },
+  "dependencies": {
+    "jasmine-core": "^2.9.1"
   }
 }
